@@ -1,0 +1,25 @@
+---
+- name: os | ensure install directory exists
+  become: yes
+  become_user: root
+  file:
+    path: '{{dumb_init_install_dir}}'
+    state: directory
+    mode: 0755
+
+- name: os | ensure dumb_init_install_dir/dumb-init file exists
+  become: yes
+  become_user: root
+  get_url:
+    url: '{{dumb_init_download_url}}'
+    dest: '{{dumb_init_install_dir}}/dumb-init'
+    checksum: '{{dumb_init_checksum}}'
+    mode: 0755
+
+- name: os | ensure dumb_init_install_parent_dir/dumb-init file exists
+  become: yes
+  become_user: root
+  file:
+    src: '{{dumb_init_install_dir}}/dumb-init'
+    dest: '{{dumb_init_install_parent_dir}}/dumb-init'
+    state: link
